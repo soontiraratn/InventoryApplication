@@ -1,0 +1,297 @@
+﻿@{
+    
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>@Page.Title</title>
+        <link href='http://fonts.googleapis.com/css?family=Rosarivo' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Nunito:400,700,300' rel='stylesheet' type='text/css'>
+        <link href="~/Styles/animate.css" rel="stylesheet" type="text/css">
+        <link href="~/Styles/sidr.light.css" rel="stylesheet" type="text/css">
+        <link href="~/Styles/site.css" rel="stylesheet" type="text/css" />
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js" type="text/javascript"></script>
+        <script src="~/Scripts/jquery.signalR-1.0.0-rc1.min.js"></script>
+        <script src="~/Scripts/jquery-ui-1.10.4.js"></script>
+        <script src="~/Scripts/knockout-2.2.0.js"></script>
+        <script src="~/Scripts/knockout.simpleGrid.1.3.js"></script>
+        <script src="~/Scripts/jquery.sidr.min.js" ></script>
+        <script src="~/Scripts/SpinBox.js" type="text/javascript"></script>
+        <script src="~/signalr/hubs"></script>
+        @RenderSection("script", required: false)
+    </head>
+    <body>
+
+<script type="text/javascript">
+    var viewModel;
+    var productsHub;
+    var cartLine = function (a, b, c) {
+        this.name = ko.observable(a);
+        this.quantity = ko.observable(b);
+        this.id = ko.observable(c);
+    };
+
+    $(function () {
+        viewModel = {
+            ItemsId: ko.observable(),
+            Image: ko.observable(),
+            ItemName: ko.observable(),
+            Model: ko.observable(),
+            Description: ko.observable(),
+            InStock: ko.observable(),
+            Location: ko.observable(),
+            Photo: ko.observable(),
+            CategoryName: ko.observable(),
+            DescriptionCat: ko.observable(),
+            newItemName: ko.observable(),
+            newModel: ko.observable(),
+            newLocation: ko.observable(),
+            newInStock: ko.observable(0),
+            newDescription: ko.observable(),
+            selectedCat: ko.observable(),
+            selectedCat2: ko.observable(),
+            selectedCat3: ko.observable(),
+            selectedItem: ko.observable(),
+            selectedItem2: ko.observable(),
+            selectedOrders: ko.observable(),
+            quantity: ko.observable(0),
+            customer: ko.observable(),
+            email: ko.observable(),
+            orderId: ko.observable(),
+            itemsAll: ko.observableArray([]),
+            items3: ko.observableArray([]),
+            items2: ko.observableArray([]),
+            items: ko.observableArray([]),
+            categories: ko.observableArray([]),
+            cart: ko.observableArray([]),
+            orders: ko.observableArray([]),
+            orderedItems: ko.observableArray([])
+        };
+
+        viewModel.buy = function () {
+            var id = this.ItemsId();
+            var quantity = this.quantity();
+            productsHub.server.buyItem(id, quantity);
+        };
+        viewModel.canBuy = ko.computed(function () {
+            return parseFloat(this.InStock()) > 0;
+        }, viewModel);
+
+        // Shopping Cart
+        viewModel.addCart = function () {
+            if (this.quantity() > 0 && this.quantity() <= this.InStock()) {
+                var a = this.ItemName();
+                var b = this.quantity();
+                var c = this.ItemsId();
+                this.cart.push(new cartLine(a, b, c));
+                $('#empty-cart').hide();
+                this.quantity("0");
+                $('#cart-add-message').show().fadeIn(500).delay(3000).fadeOut(500);
+            }
+            else {
+                alert("Quanitity is either zero or more than what is in stock");
+            }
+        };
+        viewModel.removeLine = function (line) { viewModel.cart.remove(line) };
+
+        viewModel.submit = function () {
+            //sends data in JSON format
+            if ($("#cust-name").val() && $("#cust-email").val() && $('#items-added').is(':visible')) {
+                var name = viewModel.customer();
+                var email = viewModel.email();
+                var data = $.map(this.cart(), function (line) {
+                    return line.name() ? {
+                        Id: line.id(),
+                        Item: line.name(),
+                        Quantity: line.quantity()
+                    } : undefined
+                });
+                var length = data.length;
+                for (var i = 0; i < length; i++) {
+                    var id = data[i].Id;
+                    var quantity = data[i].Quantity;
+                    productsHub.server.buyItem(id, quantity);
+                }
+                productsHub.server.order(JSON.stringify(data), name, email);
+
+                $('#items-added tr').empty();
+                viewModel.customer("");
+                viewModel.email("");
+                viewModel.cart([]);
+                $('#empty-cart').show();
+                alert("Order Submitted");
+            }
+            else {
+                alert("Make sure there is an ITEM in your cart or you have provided your NAME and EMAIL.");
+            }
+        };
+        //Mark order as completed
+        viewModel.orderDone = function (line) {
+            var id = line.Id;
+            productsHub.server.orderComplete(id);
+        };
+        // ADD CATEGORY
+        viewModel.addCat = function () {
+            var CatName = this.CategoryName();
+            var description = this.DescriptionCat();
+            productsHub.server.addCategory(CatName, description);
+            this.CategoryName("");
+            this.DescriptionCat("");
+        };
+        //DELETE CATEGORY
+        viewModel.removeCat = function () {
+            var cat = this.selectedCat();
+            var catId = parseInt(cat);
+            productsHub.server.removeCategory(catId);
+        };
+        //ADD ITEMS
+        viewModel.addItem = function () {
+            var cat = this.selectedCat2();
+            var catId = parseInt(cat);
+            var name = this.newItemName();
+            var model = this.newModel();
+            var desc = this.newDescription();
+            var quantity = this.newInStock();
+            var stock = parseInt(quantity);
+            var location = this.newLocation();
+            productsHub.server.addItem(catId, name, model, desc, stock, location);
+            this.newItemName("");
+            this.newModel("");
+            this.newDescription("");
+            this.newInStock("");
+            this.newLocation("");
+        };
+        //EDIT ITEM
+        viewModel.updateItem = function () {
+            var a = this.ItemsId();
+            var id = parseInt(a);
+            var name = this.ItemName();
+            var model = this.Model();
+            var desc = this.Description();
+            var quantity = this.InStock();
+            var stock = parseInt(quantity);
+            var location = this.Location();
+            productsHub.server.updateItem(id, name, model, desc, stock, location);
+            $('.success').show().fadeIn(500).delay(3000).fadeOut(500);
+
+        };
+        //DELETE ITEM
+        viewModel.removeItem = function () {
+            var item = this.selectedItem2();
+            var id = parseInt(item);
+            var cat = this.selectedCat3();
+            var catId = parseInt(cat);
+            productsHub.server.removeItem(id, catId);
+            $('.success-delete').show().fadeIn(500).delay(3000).fadeOut(500);
+        };
+
+        ko.applyBindings(viewModel);
+
+        productsHub = $.connection.productHub;
+
+        productsHub.client.updateAvailableStock = function (ItemsInStock, id) {
+            if (viewModel.ItemsId() == id) {
+                viewModel.InStock(ItemsInStock);
+                $('span[data-bind="text:InStock"]').effect('highlight', { color: '#9ec6e2' }, 3000);
+            }
+        };
+        productsHub.client.updateCategories = function (newData) {
+            viewModel.categories(newData);
+        };
+        productsHub.client.updateItems = function (newData, newData2) {
+            viewModel.items(newData);
+            viewModel.items2(newData);
+            viewModel.items3(newData);
+            viewModel.itemsAll(newData2);
+        };
+        productsHub.client.updateItemsData = function (newData) {
+            var items = newData[0];
+            viewModel.ItemName(items.Name);
+            viewModel.Model(items.Model);
+            viewModel.Description(items.Description);
+            viewModel.InStock(items.InStock);
+            viewModel.Location(items.Location);
+
+        };
+        productsHub.client.updateOrders = function (data) {
+            viewModel.orders(data);
+        };
+
+        $.connection.hub.start();
+
+        //Main Category Dropdown
+        $.getJSON('JsonServices/GetCategories', function (data) {
+            viewModel.categories(data);
+        });
+
+        //Main Dropdown
+        $('.categories').change(function () {
+            $.getJSON('JsonServices/GetProductsByCategory/' + $(this).val(), function (data) {
+                viewModel.items(data);
+            });
+        });
+        //ADMIN: Add Items Dropdown
+        $('.categories2').change(function () {
+            $.getJSON('JsonServices/GetProductsByCategory2/' + $(this).val(), function (data) {
+                viewModel.items2(data);
+            });
+        });
+        //ADMIN: Update Items Dropdown
+        $('.categories3').change(function () {
+            $.getJSON('JsonServices/GetProductsByCategory3/' + $(this).val(), function (data) {
+                viewModel.items3(data);
+            });
+        });
+        //ADMIN: Show Order Data
+        $('.orders-table').on('click','.order-row', function () {
+            var a = $(this).find('td:eq(0)').text();
+            $.getJSON('JsonServices/OrdersById/' + a, function (data) {
+                viewModel.orderedItems(data);
+                var item = data[0];//add order ID # to title
+                viewModel.orderId(item.orderId);
+            });
+        });
+        //ADMIN: Edit Item/Populate Fields for change
+        $('.updateItem').on('click', function () {
+            var a = viewModel.selectedItem2();
+            $.getJSON('JsonServices/GetProductById/' + a, function (data) {
+                var items = data[0];
+                viewModel.ItemsId(items.id);
+                viewModel.ItemName(items.Name);
+                viewModel.Model(items.Model);
+                viewModel.Description(items.Description);
+                viewModel.InStock(items.InStock);
+                viewModel.Location(items.Location);
+            });
+        });
+
+        //Items Select Menu
+        $('.itemsList').on('mouseenter','tr', function(){
+            $( this ).addClass( "clickable" );
+         }).on('mouseleave','tr', function(){
+            $( this ).removeClass( "clickable" );
+         }).on('click','tr',function(){
+              $.getJSON('JsonServices/GetProductById/' + $(this).find('td:first').text(),                       function (data) {
+                    var items = data[0];
+                    viewModel.ItemsId(items.id);
+                    viewModel.Image(items.Image);
+                    viewModel.ItemName(items.Name);
+                    viewModel.Model(items.Model);
+                    viewModel.Description(items.Description);
+                    viewModel.InStock(items.InStock);
+                    viewModel.Location(items.Location);
+                 });
+                $('#details').addClass('animated bounceInLeft').show();
+                $('#intro').hide();
+         });
+
+});//dont delete
+</script>  
+
+        @RenderBody()
+    </body>
+
+</html>

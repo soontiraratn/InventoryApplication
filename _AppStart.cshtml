@@ -1,0 +1,13 @@
+﻿@using System.Web.Routing
+@using Microsoft.AspNet.SignalR
+
+@{
+    RouteTable.Routes.MapHubs();
+
+    WebMail.SmtpServer = "mailhost.hctx.net";
+    WebMail.EnableSsl = false;
+    WebMail.UserName = "e-delivery@tax.hctx.net";
+    WebMail.Password = "0$";
+    WebMail.From = "e-delivery@tax.hctx.net";
+
+}

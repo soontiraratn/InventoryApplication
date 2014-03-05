@@ -1,0 +1,163 @@
+﻿@{
+    Layout="~/_Layout.cshtml";
+}
+@{
+    Page.Title = "Inventory Application Admin";
+}
+<script>
+     $.getJSON('JsonServices/GetAllItems', function (data) {
+            viewModel.itemsAll(data);
+        });
+     $.getJSON('JsonServices/Orders', function (data) {
+            viewModel.orders(data);
+        });
+
+</script>
+ <div id="accordion">
+        <h4>Add a Category</h4>
+        <div id="addCategory" class="adminForm">
+            <div class="two-col">
+            <form data-bind="submit:addCat">
+                <input data-bind="value:CategoryName, valueUpdate: 'afterkeydown'"placeholder="Category Name">
+                <input data-bind="value:DescriptionCat" placeholder="Description">
+                <button data-bind="">Add</button>
+            </form>
+            </div>
+
+            <div class="two-col">
+                <p>Existing Categories</p>
+                <select class="data-table" multiple="multiple" data-bind="options:categories, optionsText: 'CategoryName', optionsValue: 'CategoryID',selectedOptions:selectedCat"></select>
+                <button class="smallButton" data-bind="click: removeCat">Delete</button>
+            </div>
+        </div>
+
+        <h4>Add an Item</h4>
+        <div id="addItem" class="adminForm">
+        
+            <div class="two-col">
+                <form enctype="multipart/form-data" data-bind="submit:addItem"><!---->
+                    <select class="categories2" data-bind="options: categories, optionsText: 'CategoryName', optionsValue: 'CategoryID', optionsCaption: 'Choose a Category', selectedOptions:selectedCat2"></select>
+                    <input data-bind="value:newItemName" placeholder="Item Name">
+                    <input data-bind="value:newModel" placeholder="Model">
+                    <input data-bind="value:newDescription"placeholder ="Description">
+                     <div class="row ">
+                        <span class="label">Quantity</span>
+                        <span id="numberBox2">
+                            <input data-bind="value:newInStock">           
+                        </span>
+                     </div>
+                    <input data-bind="value:newLocation" placeholder="Location">
+                    <!-- <input type="file" data-bind="value:Photo">-->
+                    <button type="submit">Add Item</button> 
+                </form>
+            </div>
+
+            <div class="two-col">
+                <p>Existing Items</p>
+                <select class="data-table" multiple="multiple" data-bind="options: items2, optionsText: 'Name', optionsValue: 'id', selectedOptions: selectedItem"></select>
+                       
+            </div>
+        </div>
+        
+             <h4>Edit Item</h4>
+        <div id="editItem" class="adminForm">
+            <div class="two-col">
+                 <select class="categories3" data-bind="options: categories, optionsText: 'CategoryName', optionsValue: 'CategoryID', optionsCaption: 'Choose a Category', selectedOptions:selectedCat3"></select>
+                <p>Choose Item</p>
+                <select class="data-table updateItem" multiple="multiple" data-bind="options: items3, optionsText: 'Name', optionsValue: 'id', selectedOptions: selectedItem2"></select>
+                <button class="smallButton" data-bind="click: removeItem">Delete</button>
+                <div class="success">Item Updated</div>
+                <div class="success-delete">Item Deleted</div>
+
+        </div>
+            <div class="two-col">
+                <form data-bind="submit:updateItem">
+                    <input data-bind="value:ItemName" placeholder="Item Name">
+                    <input data-bind="value:Model" placeholder="Model">
+                    <input data-bind="value:Description" placeholder ="Description">
+                     <div class="row requestRow">
+                        <span class="label">Quantity</span>
+                        <span id="numberBox3">
+                            <input data-bind="value:InStock">
+                        </span>
+                     </div>
+                    <input data-bind="value:Location" placeholder="Location">
+        
+                    <input type="file" data-bind="value:Photo" name="pic" accept="image/*">
+                    <button type="submit">Update</button>
+                </form>
+            </div>
+
+        
+        </div>
+        <h4>Add Photo</h4>
+        <div class="adminForm">
+            <div class="two-col">
+                <form enctype="multipart/form-data" method="post">
+                    <select class="data-table" name="selectItem" multiple="multiple" data-bind="options: itemsAll, optionsText: 'Name', optionsValue: 'id', selectedOptions: selectedItem"></select>
+                    @FileUpload.GetHtml(initialNumberOfFiles:1, allowMoreFilesToBeAdded:false, includeFormTag:false, uploadText:"Upload Image")
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+    </div><!--accodion end-->
+    <div id="orders">
+        <div id="pending-orders">
+            <h3>Pending Orders</h3> 
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Order #</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Order Date</th>
+                        <th>Order Complete?</th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: orders">
+                    <tr class="order-row">
+                        <td data-bind="text:Id"></td>
+                        <td data-bind="text:Name"></td>
+                        <td data-bind="text:Email"></td>
+                        <td data-bind="text:OrderDate"></td>
+                        <td><button id="order-comp" data-bind="click: $root.orderDone">Done</button></td>
+                    </tr> 
+                </tbody>
+            </table>
+        </div>
+        <div id="items-ordered">
+            <h3>Items for Order # <span data-bind="text:orderId"></span></h3> 
+             <!-----------------ITEM HEADER------------------>
+                <table class="orders-table">
+                    <thead class="tbl-head-items">
+                    <tr class="tbl-head-items">
+                        <th>Item ID</th>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                    </tr>
+                    </thead>
+                  <!-----------------END ITEM HEADER------------------>
+                 <!-----------------ITEM LIST------------------>
+                    <tbody class="item-table" data-bind="foreach: orderedItems">
+                        <tr>
+                            <td data-bind="text:itemId"></td>
+                            <td data-bind="text:item"></td>
+                            <td data-bind="text:quantity"></td>
+                        </tr>
+                    </tbody>
+                 <!----------------- END ITEM LIST------------------>  
+                </table>
+        </div>
+    </div>       
+        
+<script>
+  
+    //var spinboxCart = new SpinBox('numberBox-cart', { 'minimum': 0 });
+    var spinbox2 = new SpinBox('numberBox2', { 'minimum': 0 });
+    var spinbox3 = new SpinBox('numberBox3', { 'minimum': 0 });
+    $(document).ready(function () {
+     
+        $("#accordion").accordion();
+
+    });             
+</script>

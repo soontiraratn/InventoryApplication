@@ -1,0 +1,8 @@
+﻿@{
+    var db = Database.Open("Northwind");
+    var sql = "SELECT Id, name, email, CONVERT(NVARCHAR(20), OrderDate, 100) AS OrderDate FROM Orders WHERE Completed=0 ORDER BY Id ";
+    var data = db.Query(sql);
+    Response.ContentType = "application/json";
+    Json.Write(data, Response.Output);
+}
+

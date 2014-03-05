@@ -1,0 +1,8 @@
+﻿@{
+    var db = Database.Open("Northwind");
+    var sql = "SELECT Name, id FROM Items";
+    var data = db.Query(sql);
+    Response.ContentType = "application/json";
+    Json.Write(data, Response.Output);
+}
+

@@ -1,0 +1,399 @@
+body {
+    font-family: "Segoe UI", Arial, Helvetica;
+    background-color: #fcfcfc;
+    margin: 0;
+}
+* {
+    font-family: 'Nunito',sans-serif;
+}
+#title {
+    font-weight: 300;
+    text-decoration: underline;
+    font-size: 200%;
+}
+#products {
+    position: fixed;
+    height: 100%;
+    width: 250px;
+    color: #fcfcfc;
+    border-radius: 0 25px 0 0;
+    z-index: 9999;
+    background: #B54642;
+}
+.itemsList {
+    width: 100%;
+}
+.itemsList td{
+    padding: 5px;
+}
+#detailSection {
+    padding: 5px 5px 5px 250px;
+}
+#details {
+    background-color: #FFFFFF;
+    border-radius: 13px;
+    box-shadow: 0 0 5px #C0C0C0;
+    display: none;
+    margin: 20px auto 0;
+    padding: 15px;
+    width: 400px;
+    z-index: 1;
+}
+#detailImage {
+    text-align: center;
+}
+.row,.lastRow {
+    clear: both;
+    margin: 5px;
+    overflow: auto;
+    margin: 5px; 
+}
+.rowImage {
+    text-align: center;
+}
+.lastRow {
+    margin-top: 15px;
+}
+.label {
+    float: left;
+    width: 30%;
+    padding-right: 5px;
+    text-align: right;
+    font-weight: bold;
+    font-weight: 400;
+}
+.adminForm .label {
+    width: auto;
+    text-align: left;
+    padding-top: 15px;
+}
+#addItem > select {
+  padding: 5px;
+}
+#addItem #requestRow {
+    padding: 0;
+} 
+.data{
+    float:  left;
+    width:  60%;
+    margin-left: 10px;
+    font-weight: 300;
+}
+h1 {
+    font-family:'Rosarivo';
+}
+h1,h3,h4 {
+    text-align: center;
+}
+.reorder{
+    width:  30px;
+}
+.clickable{
+    cursor: pointer;
+    background-color: #CF504B;
+}
+#selectBox {
+    padding: 20px 10px;
+}
+#selectBox select {
+    width: 100%;
+    padding: 5px;
+    font-size: 110%;
+}
+button {
+    width: 100%;
+    background-color: #3E4A7F;
+    border: 0 none;
+    color: #FFFFFF;
+    display: inline-block;
+    padding: 20px 40px;
+    position: relative;
+    text-align: center; 
+    border-radius: 10px;
+    box-shadow: 0 4px #2B3458;
+    font-size: 125%;
+    transition: ease .1s;
+    margin: 5px;
+}
+button:hover {
+    background-color: #384372;
+    cursor: pointer;
+}
+button:active {
+    box-shadow: none !important;
+    transform: translateY(4px);
+}
+button:disabled {
+    visibility: hidden;
+}
+#outofstock {
+    bottom: 50px;
+    color: #FF0000;
+    right: 120px;
+    position: absolute;
+    font-weight: bold;
+}
+.smallButton {
+   background-color: #BB5751;
+   padding: 5px 10px;
+   margin: 10px;
+   font-size: 100%;
+   width: auto;
+   box-shadow: 0 4px #823D38;
+}
+button.smallButton:hover {
+    background-color: #A64D48; 
+}
+button:hover {
+    background-color: #384373;
+}
+.divider {
+    width: 100%;
+    box-shadow: 0px 1px 1px #999;
+    height: 1px;
+    clear: both;
+    margin: 10px 0;
+}
+.requestRow {
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0);
+}
+.adminForm {
+    width: 100%;
+    margin: 0px auto;
+    overflow: auto;
+    background-color: #A5CCB5;
+    height: auto !important;
+}
+#accordion {
+    background-color: #8AAB98;
+    float: left;
+    width: 500px;
+}
+.ui-accordion-header {
+    border-bottom: 1px solid #C0C0C0;
+    color: #FCFCFC;
+    margin: 0;
+    padding: 10px;
+}
+.ui-accordion-header:hover {
+    background-color: #799686;
+    cursor: pointer;
+}
+#orders {
+    float: left;
+    margin: 15px;
+}
+.expand-orders {
+  background-color: #384373;
+  color: #FFF;
+  height: 20px;
+  margin: 0 auto;
+  width: 20px;
+  cursor: pointer;
+}
+.adminForm .two-col form > input,#addItem select.categories2, .categories3{
+    width: 100%;
+    display: block;
+    clear: both;
+    margin: 10px 0px;
+    height: 30px;
+}
+.adminForm .two-col p{
+    margin: 0px 0px 5px 0px;
+}
+.data-table {
+    width: 180px;
+    height: 120px
+}
+.two-col {
+    float: left;
+    width: 200px;
+    margin: 20px;
+}
+.edit-menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-image: url(../cart.png);
+    width: 64px;
+    height: 64px;
+    margin-top: 12px;
+}
+#edit-menu2 {
+    right: 400px;
+    background-image: url(../cartx.png);
+}
+#cart-add-message {
+    position: absolute;
+    top: 25px;
+    right: 70px;
+    background-color: #C8F7DC;
+    padding: 10px;
+    color: #333;
+    display: none;
+}
+#intro {
+    margin-top: 35px;
+    color: #00488E;
+    width: 600px;
+}
+.success,.success-delete {
+  display: none;
+  text-align: center;
+  margin-top: 94px;
+  background-color: #E8FFF1;
+  border-radius: 10px;
+  padding: 5px;
+}
+.sidr {
+  padding: 10px 0px 20px 0px;
+  height: auto;
+}
+.sidr form {
+    padding: 15px 50px;
+    border-top: 1px solid #576B5F ; 
+}
+.sidr h1{
+    text-decoration: underline;
+    color: #fcfcfc;
+}
+.shop-cart {
+    text-align: center;
+}
+.shop-cart td {
+    width: 65px;
+}
+.shop-cart th {
+    color: #fff;
+}
+.shop-cart th:first-child, .shop-cart td:first-child {
+    width: 256px;
+}
+.delete-btn {
+    background-image:url("../delete.png");
+    width: 16px;
+    height: 16px;
+    display: block;
+}
+.num-box {
+    width : 2.5em;
+    height : 2.5625em;
+    padding : 0 0.25em;
+    border : 0.0625em solid rgb(224,224,224);
+    border-radius : 0.25em;
+    font-size : 1em;
+    text-align: center;   
+}
+#empty-cart {
+    text-align: center;
+    padding: 15px 0px;
+}
+/*------------------------Table-------------------------------*/
+table.orders-table {
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+table.orders-table thead th, table.orders-table td { 
+    border: 1px solid #000000;
+    text-align: center;
+    padding: 5px;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+table.orders-table thead th {
+    background-color: #A66A66;
+    color: #FFF;
+}
+.order-row{
+    background-color: #FFEAE8;
+    cursor: pointer;
+}
+.order-row:hover {
+   background-color: #E0CDCC;
+}
+#order-comp {
+    padding: 0px;
+    width: 50%;
+    color: #333;
+    background-color: #A5CCB5;
+    box-shadow: 0 4px #799686;
+    
+}
+.item-table tr {
+    background-color: #CCA8A5;
+}
+#pending-orders, #items-ordered {
+    max-height: 500px;
+    overflow: auto;
+}
+/*------------------------Spin Box---------------------------------*/
+.spinBox{
+position : relative;
+display : inline-block;
+margin-top : 0.375em;
+padding-right : 1.875em;
+border-radius : 0.25em;
+box-shadow : 0 0.0625em 0 rgba(255,255,255,0.5);
+}
+.spinBox input{
+display : block;
+width : 2.5em;
+height : 2.5625em;
+padding : 0 0.25em;
+border : 0.0625em solid rgb(224,224,224);
+border-right : none;
+border-top-left-radius : 0.25em;
+border-bottom-left-radius : 0.25em;
+color : rgb(64,64,64);
+font-family : inherit;
+font-size : 1em;
+text-align : right;
+box-shadow : 0 0.125em 0.125em rgba(0,0,0,0.03125) inset;
+}
+.spinBox input[disabled]{
+background : rgb(240,240,240);
+}
+.spinBoxUp,
+.spinBoxDown{
+position : absolute;
+right : 0;
+display : block;
+width : 1.75em;
+height : 50%;
+border : 0.0625em solid rgb(224,224,224);
+background : rgb(248,248,248);
+background-image : -webkit-linear-gradient(rgb(248,248,248),rgb(240,240,240));
+background-image : linear-gradient(rgb(248,248,248),rgb(240,240,240));
+cursor : pointer;
+}
+.spinBox input[disabled] + span,
+.spinBox input[disabled] + span + span{
+background : rgb(240,240,240);
+cursor : auto;
+}
+.spinBoxUp span,
+.spinBoxDown span{
+display : block;
+width : 0.75em;
+height : 0.75em;
+margin: 3px auto;
+}
+.spinBoxUp{
+top : 0;
+border-top-right-radius : 0.25em;
+}
+.spinBoxUp span{
+background : url('../arrow-up.png') no-repeat center center;
+}
+.spinBoxDown{
+bottom : 0;
+border-bottom-right-radius : 0.25em;
+}
+.spinBoxDown span{
+background : url('../arrow-down.png') no-repeat center center;
+}
+
+
+
+

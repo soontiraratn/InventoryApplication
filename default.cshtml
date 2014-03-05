@@ -1,0 +1,151 @@
+﻿@using Microsoft.Web.Helpers;
+@using System.IO;
+@{
+    Layout="~/_Layout.cshtml";
+}
+@{
+    Page.Title = "Inventory Application";
+}
+
+@{         
+       var Results="";
+       var fileName= "";
+       var idItem="";
+       if(IsPost){
+       var image = Request.Files[0];
+           idItem= Request["selectItem"];
+       var db= Database.Open("Northwind");
+            fileName = Path.GetFileName(image.FileName);
+            if (fileName != String.Empty && idItem != null)
+            {
+                //var fileStream = image.InputStream;
+                var fileLength = image.ContentLength;
+                byte[] fileContent = new byte[fileLength];
+                //fileStream.Read(fileContent, 0, fileLength);
+                //var sql="UPDATE Items SET Image = @0 WHERE id = @1";
+                //db.Execute(sql,fileContent,idItem);
+               Results = "successful " + idItem + " " + fileContent;
+            }
+            else{
+                Results = "Unsuccessful " + idItem + " " + fileName;
+            }
+         }    
+}
+<script>
+        //Main Dropdown
+        $('.categories').change(function () {
+            $.getJSON('JsonServices/GetProductsByCategory/' + $(this).val(), function (data) {
+                viewModel.items(data);
+            });
+        });
+</script>
+<div id="products">
+    @Results
+    <h1>Items</h1>
+    <div id="selectBox">
+        <select class="categories" data-bind="options: categories, optionsText: 'CategoryName', optionsValue: 'CategoryID', optionsCaption: 'Choose a Category'"></select>
+    </div>
+
+    <table class="itemsList"> 
+        <tbody data-bind="foreach: items"> 
+            <tr> 
+                <td><span hidden data-bind="text:id"></span></td> 
+                <td><span data-bind="text:Name"></span></td> 
+            </tr> 
+        </tbody> 
+    </table>
+</div>
+  
+<div id="detailSection">
+    <h1 id="title">Inventory Application</h1>
+    <h1 id="intro"> <img src="arrow.png" alt="arrow left" />Start by choosing an item.
+    </h1>
+    
+    <div id="details">
+        <h3>Details</h3>
+
+            <div class="row rowImage">
+                <img data-bind="attr:{src:Image}"></img>
+            </div>
+       
+        <div class="row">
+            <span class="label">Item:</span>
+            <span class="data" data-bind="text:ItemName"></span>
+        </div>
+        <div class="row">
+            <span class="label">Model/SKU:</span>
+            <span class="data" data-bind="text:Model"></span>
+        </div>
+        <div class="row">
+            <span class="label">Description:</span>
+            <span class="data" data-bind="text:Description"></span>
+        </div>
+        <div class="row">
+            <span class="label">Units In Stock:</span>
+            <span class="data" data-bind="text:InStock"></span>
+        </div>
+        <div class="row">
+            <span class="label">Location:</span>
+            <span class="data" data-bind="text:Location"></span>
+        </div>
+        <div class="divider">
+        </div>
+        <div class="row" id="requestRow">
+            <span class="label">Quantity
+                <span id="numberBox">
+                    <input data-bind="value: quantity">
+                </span>
+            </span>
+           
+            <span class="data"><span id="outofstock">Out of Stock</span><button data-bind="click: addCart,enable: canBuy">Add to Cart</button></span>
+        </div>
+    </div>
+
+   
+    <!--------------------------------Shopping Cart----------------------------------->
+        <div id="cart-add-message">Item Added to Cart</div>
+        <a href="#sidr"><div class="edit-menu" id="edit-menu1"></div></a>
+   <div id="sidr">
+       <a href="#sidr"><div class="edit-menu" id="edit-menu2"></div></a>
+       <h1>Shopping Cart</h1>
+       <table class="shop-cart"> 
+           <tbody> 
+                <tr> 
+                    <th>Item Name</th>
+                    <th>Quantity</th>
+                </tr> 
+            </tbody> 
+        </table>
+       <p id="empty-cart">Your Cart is Empty</p>
+       <table class="shop-cart" id="items-added"> 
+           <tbody data-bind="foreach: cart">  
+               <tr> 
+                    <td><span data-bind="text:name, value: $parent.name"></span></td>
+                    <td>                                          
+                        <span data-bind="text: quantity,value: $parent.quantity"></span>                        
+                    </td>
+                    <td><a class="delete-btn" href="#" data-bind="click: $parent.removeLine"></a></td>
+                </tr> 
+            </tbody> 
+        </table>
+        <form> 
+            <h1>Your Information</h1>
+            <div><input data-bind="value: customer" id="cust-name" type="text" placeholder="Full Name" /></div>
+            <div><input data-bind="value: email" type="email" id="cust-email" placeholder="Email" /></div>
+            <button data-bind="click: submit">Submit Order</button>
+        </form>
+
+</div><!--sidr end-->
+</div><!--detailSection end-->
+
+<script>
+    var spinbox = new SpinBox('numberBox', { 'minimum': 0});
+
+    $(document).ready(function () {
+        $('.edit-menu').sidr({
+            side: 'right',
+            displace: false
+        });
+
+    });             
+</script>

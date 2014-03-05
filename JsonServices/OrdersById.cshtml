@@ -1,0 +1,17 @@
+﻿@{
+     if (UrlData[0].IsEmpty() || !UrlData[0].IsInt()) {
+        Response.SetStatus(HttpStatusCode.BadRequest);
+        Response.End();
+    }
+    var db = Database.Open("Northwind");
+    var sql = @"SELECT itemId, item, quantity,orderId FROM ItemsOrdered WHERE orderId =@0";
+    var data = db.Query(sql, UrlData[0]);
+    if(data.Count() == 0){
+        Response.SetStatus(HttpStatusCode.BadRequest);
+        Response.End();
+    }
+    Response.ContentType = "application/json";
+    Json.Write(data, Response.Output);
+}
+
+
