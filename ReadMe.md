@@ -1,6 +1,9 @@
-SignalRSamples
+Inventory Application
 ==============
 
-Code to accompany article SignalR And Knockout In ASP.NET Web Pages Using WebMatrix
+Lists items and quantities with ability to order items and check them out through a shopping cart.
+Uses Signal R and Knockout. 
 
+helpful links
 http://www.mikesdotnetting.com/Article/206/SignalR-And-Knockout-In-ASP.NET-Web-Pages-Using-WebMatrix
+http://knockoutjs.com
