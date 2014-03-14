@@ -1,0 +1,71 @@
+﻿@{
+   Layout="~/_Layout.cshtml";
+   // Initialize page
+var username = "";
+var password = "";
+var confirmPassword = "";
+var ErrorMessage = "";
+
+// If this is a POST request, validate and process data
+if (IsPost)
+{
+  username = Request.Form["username"];
+  password = Request.Form["password"];
+  confirmPassword = Request.Form["confirmPassword"];
+
+  if (username.IsEmpty() || password.IsEmpty())
+  {ErrorMessage = "You must specify both username and password.";}
+
+  if (password != confirmPassword)
+  {ErrorMessage = "Password and confirmation do not match.";}
+
+  // If all information is valid, create a new account
+  if (ErrorMessage=="")
+    {
+    var db = Database.Open("Northwind");
+    var user = db.QuerySingle("SELECT Email FROM UserProfile WHERE LOWER(Email) = LOWER(@0)", username);
+    if (user == null)
+      {
+      db.Execute("INSERT INTO UserProfile (Email) VALUES (@0)", username);
+      WebSecurity.CreateAccount(username, password, false);
+      // Navigate back to the homepage and exit
+      Response.Redirect("admin.cshtml");
+      }
+      else
+      {ErrorMessage = "Username is already in use.";}
+    }
+}
+}
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Add New User</title>
+    </head>
+    <body>
+     
+<h1>Register</h1>
+<form method="post" action="" class="login">
+<fieldset>
+<legend>Add New User</legend>
+
+<input type="text" placeholder="Username" name="username" />
+
+<input type="password" placeholder="Password" name="password" />
+
+<input type="password" placeholder="Confirm Password" name="confirmPassword" />
+
+<button type="submit" value="Register">Add</button>
+
+</fieldset>
+</form>   
+@{
+if (ErrorMessage!="")
+{
+<p>@ErrorMessage</p>
+<p>Please correct the errors and try again.</p>
+} 
+}
+    </body>
+</html>

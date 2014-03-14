@@ -1,18 +1,45 @@
-﻿@{
+﻿@{if (!WebSecurity.IsAuthenticated)
+{
+Response.Redirect("login.cshtml");
+}
+}
+@{
     Layout="~/_Layout.cshtml";
 }
 @{
     Page.Title = "Inventory Application Admin";
 }
 <script>
-     $.getJSON('JsonServices/GetAllItems', function (data) {
-            viewModel.itemsAll(data);
-        });
-     $.getJSON('JsonServices/Orders', function (data) {
-            viewModel.orders(data);
-        });
+
+    $.getJSON('JsonServices/GetAllItems', function (data) {
+        viewModel.itemsAll(data);
+    });
+
+    $.getJSON('JsonServices/Orders', function (data) {
+        if (data != 0) {
+             viewModel.orders(data);
+            $('#pending-orders, #items-ordered').show();
+            $('#empty-orders').hide();
+        }       
+    });
+     
+   productsHub = $.connection.productHub;
+   productsHub.client.updateOrders = function (data) { 
+        $.getJSON('JsonServices/Orders', function (data) {
+        if (data != 0) {
+             viewModel.orders(data);
+            $('#pending-orders, #items-ordered').show();
+            $('#empty-orders').hide();
+        }
+        else{
+            $('#pending-orders, #items-ordered').hide();
+            $('#empty-orders').show();
+        }
+        });     
+        };
 
 </script>
+<div id="left-col">
  <div id="accordion">
         <h4>Add a Category</h4>
         <div id="addCategory" class="adminForm">
@@ -20,7 +47,7 @@
             <form data-bind="submit:addCat">
                 <input data-bind="value:CategoryName, valueUpdate: 'afterkeydown'"placeholder="Category Name">
                 <input data-bind="value:DescriptionCat" placeholder="Description">
-                <button data-bind="">Add</button>
+                <button class="blue-btn" data-bind="">Add</button>
             </form>
             </div>
 
@@ -48,7 +75,7 @@
                      </div>
                     <input data-bind="value:newLocation" placeholder="Location">
                     <!-- <input type="file" data-bind="value:Photo">-->
-                    <button type="submit">Add Item</button> 
+                    <button class="blue-btn" type="submit">Add Item</button> 
                 </form>
             </div>
 
@@ -59,7 +86,7 @@
             </div>
         </div>
         
-             <h4>Edit Item</h4>
+             <h4>Edit/Delete Item</h4>
         <div id="editItem" class="adminForm">
             <div class="two-col">
                  <select class="categories3" data-bind="options: categories, optionsText: 'CategoryName', optionsValue: 'CategoryID', optionsCaption: 'Choose a Category', selectedOptions:selectedCat3"></select>
@@ -84,24 +111,35 @@
                     <input data-bind="value:Location" placeholder="Location">
         
                     <input type="file" data-bind="value:Photo" name="pic" accept="image/*">
-                    <button type="submit">Update</button>
+                    <button class="blue-btn" type="submit">Update</button>
                 </form>
             </div>
-
-        
         </div>
+
         <h4>Add Photo</h4>
         <div class="adminForm">
+            <p>Under Construction</p>
             <div class="two-col">
+                <!--
                 <form enctype="multipart/form-data" method="post">
                     <select class="data-table" name="selectItem" multiple="multiple" data-bind="options: itemsAll, optionsText: 'Name', optionsValue: 'id', selectedOptions: selectedItem"></select>
                     @FileUpload.GetHtml(initialNumberOfFiles:1, allowMoreFilesToBeAdded:false, includeFormTag:false, uploadText:"Upload Image")
-                    <button type="submit">Send</button>
-                </form>
+                    <button class="blue-btn" type="submit">Send</button>
+                </form>-->
             </div>
         </div>
+
+        <h4>Add User</h4>
+            <div class="adminForm">
+                <div class="two-col">
+                 <a href="register.cshtml"><button class="blue-btn">Add User</button></a>
+                </div>
+            </div>
     </div><!--accodion end-->
+    </div>
+
     <div id="orders">
+        <h3 id="empty-orders">No Pending Orders</h3>
         <div id="pending-orders">
             <h3>Pending Orders</h3> 
             <table class="orders-table">

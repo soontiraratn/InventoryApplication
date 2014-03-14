@@ -1,6 +1,6 @@
 ﻿@{
     var db = Database.Open("Northwind");
-    var sql = "SELECT CategoryId, CategoryName, Description_cat FROM Categories";
+    var sql = "SELECT CategoryID, CategoryName FROM Categories";
     var data = db.Query(sql);
     Response.ContentType = "application/json";
     Json.Write(data, Response.Output);

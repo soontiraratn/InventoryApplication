@@ -1,0 +1,60 @@
+﻿@{
+    
+ Layout="~/_Layout.cshtml";
+     // Initialize page
+var username = "";
+var password = "";
+var ErrorMessage = "";
+
+// If this is a POST request, validate and process data
+if (IsPost)
+  {
+  username = Request.Form["username"];
+  password = Request.Form["password"];
+  if (username.IsEmpty() || password.IsEmpty())
+    {ErrorMessage = "You must specify a username and password.";} 
+  else
+  {
+  // Login, Navigate back to the homepage and exit
+  if (WebSecurity.Login(username, password, false))
+    {Response.Redirect("admin.cshtml");}
+    else
+    {ErrorMessage = "Login failed";}
+  }
+}
+
+
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Admin Login</title>
+    </head>
+    <body>
+<h1>Inventory App Login Page</h1>
+<!--<img src="logo.png" id="logo" alt="" />-->
+<form method="post" action="" class="login">
+<fieldset>
+<legend>Log In</legend>
+
+<input type="text" id="username" name="username" placeholder="Username" />
+<br>
+<input type="password" id="password" name="password" placeholder="Password" />
+<br>
+<button type="submit">Login</button>
+
+</fieldset>
+</form>
+ @{
+     if (ErrorMessage!="")
+        {
+        <div id="login-error">
+        <h3>@ErrorMessage</h3>
+        </div>
+        }
+}
+    </body>
+</html>

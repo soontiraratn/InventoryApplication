@@ -2,11 +2,8 @@
 @using System.IO;
 @{
     Layout="~/_Layout.cshtml";
-}
-@{
     Page.Title = "Inventory Application";
 }
-
 @{         
        var Results="";
        var fileName= "";
@@ -31,17 +28,11 @@
             }
          }    
 }
-<script>
-        //Main Dropdown
-        $('.categories').change(function () {
-            $.getJSON('JsonServices/GetProductsByCategory/' + $(this).val(), function (data) {
-                viewModel.items(data);
-            });
-        });
-</script>
+
 <div id="products">
     @Results
     <h1>Items</h1>
+
     <div id="selectBox">
         <select class="categories" data-bind="options: categories, optionsText: 'CategoryName', optionsValue: 'CategoryID', optionsCaption: 'Choose a Category'"></select>
     </div>
@@ -54,10 +45,13 @@
             </tr> 
         </tbody> 
     </table>
+
 </div>
   
 <div id="detailSection">
     <h1 id="title">Inventory Application</h1>
+    <!--<img src="logo.png" id="logo" alt="" />-->
+
     <h1 id="intro"> <img src="arrow.png" alt="arrow left" />Start by choosing an item.
     </h1>
     
@@ -65,7 +59,7 @@
         <h3>Details</h3>
 
             <div class="row rowImage">
-                <img data-bind="attr:{src:Image}"></img>
+               <!-- <img data-bind="attr:{src:Image}"></img> -->
             </div>
        
         <div class="row">
@@ -100,15 +94,13 @@
             <span class="data"><span id="outofstock">Out of Stock</span><button data-bind="click: addCart,enable: canBuy">Add to Cart</button></span>
         </div>
     </div>
-
    
     <!--------------------------------Shopping Cart----------------------------------->
         <div id="cart-add-message">Item Added to Cart</div>
         <a href="#sidr"><div class="edit-menu" id="edit-menu1"></div></a>
    <div id="sidr">
        <a href="#sidr"><div class="edit-menu" id="edit-menu2"></div></a>
-       <h1>Shopping Cart</h1>
-       <table class="shop-cart"> 
+       <table class="shop-cart" id="cart-header"> 
            <tbody> 
                 <tr> 
                     <th>Item Name</th>
@@ -116,8 +108,9 @@
                 </tr> 
             </tbody> 
         </table>
-       <p id="empty-cart">Your Cart is Empty</p>
+       
        <table class="shop-cart" id="items-added"> 
+           <tr id="empty-cart"><td>Your Cart is Empty</td></tr>
            <tbody data-bind="foreach: cart">  
                <tr> 
                     <td><span data-bind="text:name, value: $parent.name"></span></td>
@@ -132,20 +125,20 @@
             <h1>Your Information</h1>
             <div><input data-bind="value: customer" id="cust-name" type="text" placeholder="Full Name" /></div>
             <div><input data-bind="value: email" type="email" id="cust-email" placeholder="Email" /></div>
-            <button data-bind="click: submit">Submit Order</button>
+            <button class="blue-btn" data-bind="click: submit">Submit Order</button>
         </form>
 
 </div><!--sidr end-->
 </div><!--detailSection end-->
 
 <script>
-    var spinbox = new SpinBox('numberBox', { 'minimum': 0});
-
     $(document).ready(function () {
+
+        var spinbox = new SpinBox('numberBox', { 'minimum': 0 });
+
         $('.edit-menu').sidr({
             side: 'right',
             displace: false
         });
-
-    });             
+    });
 </script>

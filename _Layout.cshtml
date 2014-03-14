@@ -8,8 +8,9 @@
     <head>
         <meta charset="utf-8" />
         <title>@Page.Title</title>
-        <link href='http://fonts.googleapis.com/css?family=Rosarivo' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Merriweather:400,300,700,900' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Nunito:400,700,300' rel='stylesheet' type='text/css'>
+        <link href="~/Styles/themes/default/style.css" rel="stylesheet" type="text/css">
         <link href="~/Styles/animate.css" rel="stylesheet" type="text/css">
         <link href="~/Styles/sidr.light.css" rel="stylesheet" type="text/css">
         <link href="~/Styles/site.css" rel="stylesheet" type="text/css" />
@@ -95,7 +96,10 @@
                 alert("Quanitity is either zero or more than what is in stock");
             }
         };
-        viewModel.removeLine = function (line) { viewModel.cart.remove(line) };
+        viewModel.removeLine = function (line) { 
+            viewModel.cart.remove(line);
+             $('#empty-cart').show();
+            };
 
         viewModel.submit = function () {
             //sends data in JSON format
@@ -128,12 +132,14 @@
                 alert("Make sure there is an ITEM in your cart or you have provided your NAME and EMAIL.");
             }
         };
-        //Mark order as completed
+        //Mark order as completed ADMIN
         viewModel.orderDone = function (line) {
-            var id = line.Id;
-            productsHub.server.orderComplete(id);
+            if (confirm("Mark Order as Completed?")) {
+                var id = line.Id;
+                productsHub.server.orderComplete(id);
+            }
         };
-        // ADD CATEGORY
+        // ADD CATEGORY ADMIN
         viewModel.addCat = function () {
             var CatName = this.CategoryName();
             var description = this.DescriptionCat();
@@ -141,13 +147,13 @@
             this.CategoryName("");
             this.DescriptionCat("");
         };
-        //DELETE CATEGORY
+        //DELETE CATEGORY ADMIN
         viewModel.removeCat = function () {
             var cat = this.selectedCat();
             var catId = parseInt(cat);
             productsHub.server.removeCategory(catId);
         };
-        //ADD ITEMS
+        //ADD ITEMS ADMIN
         viewModel.addItem = function () {
             var cat = this.selectedCat2();
             var catId = parseInt(cat);
@@ -164,7 +170,7 @@
             this.newInStock("");
             this.newLocation("");
         };
-        //EDIT ITEM
+        //EDIT ITEM ADMIN
         viewModel.updateItem = function () {
             var a = this.ItemsId();
             var id = parseInt(a);
@@ -178,7 +184,7 @@
             $('.success').show().fadeIn(500).delay(3000).fadeOut(500);
 
         };
-        //DELETE ITEM
+        //DELETE ITEM ADMIN
         viewModel.removeItem = function () {
             var item = this.selectedItem2();
             var id = parseInt(item);
@@ -214,11 +220,8 @@
             viewModel.Description(items.Description);
             viewModel.InStock(items.InStock);
             viewModel.Location(items.Location);
+        };
 
-        };
-        productsHub.client.updateOrders = function (data) {
-            viewModel.orders(data);
-        };
 
         $.connection.hub.start();
 
@@ -246,11 +249,11 @@
             });
         });
         //ADMIN: Show Order Data
-        $('.orders-table').on('click','.order-row', function () {
+        $('.orders-table').on('click', '.order-row', function () {
             var a = $(this).find('td:eq(0)').text();
             $.getJSON('JsonServices/OrdersById/' + a, function (data) {
                 viewModel.orderedItems(data);
-                var item = data[0];//add order ID # to title
+                var item = data[0]; //add order ID # to title
                 viewModel.orderId(item.orderId);
             });
         });
@@ -269,26 +272,26 @@
         });
 
         //Items Select Menu
-        $('.itemsList').on('mouseenter','tr', function(){
-            $( this ).addClass( "clickable" );
-         }).on('mouseleave','tr', function(){
-            $( this ).removeClass( "clickable" );
-         }).on('click','tr',function(){
-              $.getJSON('JsonServices/GetProductById/' + $(this).find('td:first').text(),                       function (data) {
-                    var items = data[0];
-                    viewModel.ItemsId(items.id);
-                    viewModel.Image(items.Image);
-                    viewModel.ItemName(items.Name);
-                    viewModel.Model(items.Model);
-                    viewModel.Description(items.Description);
-                    viewModel.InStock(items.InStock);
-                    viewModel.Location(items.Location);
-                 });
-                $('#details').addClass('animated bounceInLeft').show();
-                $('#intro').hide();
-         });
+        $('.itemsList').on('mouseenter', 'tr', function () {
+            $(this).addClass("clickable");
+        }).on('mouseleave', 'tr', function () {
+            $(this).removeClass("clickable");
+        }).on('click', 'tr', function () {
+            $.getJSON('JsonServices/GetProductById/' + $(this).find('td:first').text(), function (data) {
+                var items = data[0];
+                viewModel.ItemsId(items.id);
+                viewModel.Image(items.Image);
+                viewModel.ItemName(items.Name);
+                viewModel.Model(items.Model);
+                viewModel.Description(items.Description);
+                viewModel.InStock(items.InStock);
+                viewModel.Location(items.Location);
+            });
+            $('#details').addClass('animated bounceInLeft').show();
+            $('#intro').hide();
+        });
 
-});//dont delete
+    }); //dont delete
 </script>  
 
         @RenderBody()

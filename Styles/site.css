@@ -1,6 +1,7 @@
 body {
     font-family: "Segoe UI", Arial, Helvetica;
     background-color: #fcfcfc;
+    background-image: url(../background2.png);
     margin: 0;
 }
 * {
@@ -11,6 +12,10 @@ body {
     text-decoration: underline;
     font-size: 200%;
 }
+#logo {
+    display: block;
+    margin: 10px auto;
+}
 #products {
     position: fixed;
     height: 100%;
@@ -18,7 +23,7 @@ body {
     color: #fcfcfc;
     border-radius: 0 25px 0 0;
     z-index: 9999;
-    background: #B54642;
+    background: #334667;
 }
 .itemsList {
     width: 100%;
@@ -79,18 +84,16 @@ body {
     margin-left: 10px;
     font-weight: 300;
 }
-h1 {
-    font-family:'Rosarivo';
-}
-h1,h3,h4 {
+h1,h2,h3,h4 {
     text-align: center;
+    font-family: 'Merriweather', serif;
 }
 .reorder{
     width:  30px;
 }
 .clickable{
     cursor: pointer;
-    background-color: #CF504B;
+    background-color: #24263B;
 }
 #selectBox {
     padding: 20px 10px;
@@ -102,7 +105,7 @@ h1,h3,h4 {
 }
 button {
     width: 100%;
-    background-color: #3E4A7F;
+    background-color: #8AAB98;
     border: 0 none;
     color: #FFFFFF;
     display: inline-block;
@@ -110,14 +113,17 @@ button {
     position: relative;
     text-align: center; 
     border-radius: 10px;
-    box-shadow: 0 4px #2B3458;
+    box-shadow: 0 4px #789E88;
     font-size: 125%;
     transition: ease .1s;
     margin: 5px;
 }
 button:hover {
-    background-color: #384372;
+    background-color: #85A794;
     cursor: pointer;
+}
+button.blue-btn:hover {
+    background-color: #2E405C;
 }
 button:active {
     box-shadow: none !important;
@@ -125,6 +131,10 @@ button:active {
 }
 button:disabled {
     visibility: hidden;
+}
+.blue-btn {
+    background-color: #334667;
+    box-shadow: 0 4px #24263B;
 }
 #outofstock {
     bottom: 50px;
@@ -143,9 +153,6 @@ button:disabled {
 }
 button.smallButton:hover {
     background-color: #A64D48; 
-}
-button:hover {
-    background-color: #384373;
 }
 .divider {
     width: 100%;
@@ -167,8 +174,6 @@ button:hover {
 }
 #accordion {
     background-color: #8AAB98;
-    float: left;
-    width: 500px;
 }
 .ui-accordion-header {
     border-bottom: 1px solid #C0C0C0;
@@ -180,9 +185,14 @@ button:hover {
     background-color: #799686;
     cursor: pointer;
 }
+#left-col {
+    background-color: #799686;
+    height: 100%;
+    position: fixed;
+}
 #orders {
     float: left;
-    margin: 15px;
+    margin: 15px 15px 15px 500px;
 }
 .expand-orders {
   background-color: #384373;
@@ -213,16 +223,16 @@ button:hover {
 }
 .edit-menu {
     position: absolute;
-    top: 0;
+    top: 15px;
     right: 0;
     background-image: url(../cart.png);
     width: 64px;
     height: 64px;
-    margin-top: 12px;
 }
 #edit-menu2 {
     right: 400px;
     background-image: url(../cartx.png);
+    top: 0;
 }
 #cart-add-message {
     position: absolute;
@@ -235,7 +245,7 @@ button:hover {
 }
 #intro {
     margin-top: 35px;
-    color: #00488E;
+    color: #778899;
     width: 600px;
 }
 .success,.success-delete {
@@ -247,27 +257,38 @@ button:hover {
   padding: 5px;
 }
 .sidr {
-  padding: 10px 0px 20px 0px;
+  padding: 0px 0px 20px 0px;
   height: auto;
+  top:15px;
+  box-shadow: -1px 1px 2px #444444;
 }
 .sidr form {
-    padding: 15px 50px;
-    border-top: 1px solid #576B5F ; 
+    padding: 5px 50px;
 }
 .sidr h1{
-    text-decoration: underline;
     color: #fcfcfc;
 }
 .shop-cart {
-    text-align: center;
+    width: 100%;    
+}
+#cart-header {
+    margin: 24px 0px 10px 0px;    
+}
+#items-added {
+    background-color: #789E88;
+    color: #555;
+    padding: 10px 0px;
 }
 .shop-cart td {
     width: 65px;
+    text-align: center;
 }
 .shop-cart th {
     color: #fff;
+    text-align: left;
 }
 .shop-cart th:first-child, .shop-cart td:first-child {
+    text-align: center;
     width: 256px;
 }
 .delete-btn {
@@ -288,6 +309,7 @@ button:hover {
 #empty-cart {
     text-align: center;
     padding: 15px 0px;
+    color: #61786B;
 }
 /*------------------------Table-------------------------------*/
 table.orders-table {
@@ -324,8 +346,32 @@ table.orders-table thead th {
     background-color: #CCA8A5;
 }
 #pending-orders, #items-ordered {
+    display: none;
     max-height: 500px;
     overflow: auto;
+}
+
+/*--------------------------Login Page----------------------------*/
+
+form.login {
+    width: 50%;
+    max-width: 400px;
+    min-width: 250px;
+    margin: 0 auto;    
+}
+form.login input {
+    width: 100%;
+    margin: 5px 0px;
+    padding: 10px 0px;
+}
+.login-error {
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+    color: #B54642; 
+}
+.login fieldset {
+    padding: 20px;
 }
 /*------------------------Spin Box---------------------------------*/
 .spinBox{

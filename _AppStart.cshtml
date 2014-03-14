@@ -2,8 +2,10 @@
 @using Microsoft.AspNet.SignalR
 
 @{
+    WebSecurity.InitializeDatabaseConnection("Northwind", "UserProfile", "UserId", "Email", true);
+    
     RouteTable.Routes.MapHubs();
-
+    
     WebMail.SmtpServer = "mailhost.hctx.net";
     WebMail.EnableSsl = false;
     WebMail.UserName = "e-delivery@tax.hctx.net";
