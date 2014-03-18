@@ -225,14 +225,20 @@ button.smallButton:hover {
     position: absolute;
     top: 15px;
     right: 0;
-    background-image: url(../cart.png);
+    background-image: url(../cart1.png);
     width: 64px;
     height: 64px;
+}
+.edit-menu:hover {
+    background-image: url(../cart.png);
 }
 #edit-menu2 {
     right: 400px;
     background-image: url(../cartx.png);
     top: 0;
+}
+#edit-menu2:hover {
+    background-image: url(../cartx1.png);
 }
 #cart-add-message {
     position: absolute;
@@ -291,11 +297,16 @@ button.smallButton:hover {
     text-align: center;
     width: 256px;
 }
-.delete-btn {
-    background-image:url("../delete.png");
+.delete-btn img{
     width: 16px;
     height: 16px;
     display: block;
+     -webkit-transition: width .2s, height .2s,-webkit-transform .2s;  /* For Safari 3.1 to 6.0 */
+    transition: width .2s, height .2s, transform .2s; 
+}
+.delete-btn img:hover {
+    width:20px;
+    height:20px;
 }
 .num-box {
     width : 2.5em;

@@ -45,14 +45,13 @@
             </tr> 
         </tbody> 
     </table>
-
 </div>
   
 <div id="detailSection">
     <h1 id="title">Inventory Application</h1>
     <!--<img src="logo.png" id="logo" alt="" />-->
 
-    <h1 id="intro"> <img src="arrow.png" alt="arrow left" />Start by choosing an item.
+    <h1 id="intro"> <img src="~/arrow.png" alt="arrow left" />Start by choosing an item.
     </h1>
     
     <div id="details">
@@ -117,7 +116,7 @@
                     <td>                                          
                         <span data-bind="text: quantity,value: $parent.quantity"></span>                        
                     </td>
-                    <td><a class="delete-btn" href="#" data-bind="click: $parent.removeLine"></a></td>
+                    <td><a class="delete-btn" href="#" data-bind="click: $parent.removeLine"><img src="~/delete.png" width="16" height="16"/></a></td>
                 </tr> 
             </tbody> 
         </table>

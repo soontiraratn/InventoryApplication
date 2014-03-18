@@ -10,7 +10,6 @@
         <title>@Page.Title</title>
         <link href='http://fonts.googleapis.com/css?family=Merriweather:400,300,700,900' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Nunito:400,700,300' rel='stylesheet' type='text/css'>
-        <link href="~/Styles/themes/default/style.css" rel="stylesheet" type="text/css">
         <link href="~/Styles/animate.css" rel="stylesheet" type="text/css">
         <link href="~/Styles/sidr.light.css" rel="stylesheet" type="text/css">
         <link href="~/Styles/site.css" rel="stylesheet" type="text/css" />
@@ -71,7 +70,6 @@
             orders: ko.observableArray([]),
             orderedItems: ko.observableArray([])
         };
-
         viewModel.buy = function () {
             var id = this.ItemsId();
             var quantity = this.quantity();
@@ -98,7 +96,7 @@
         };
         viewModel.removeLine = function (line) { 
             viewModel.cart.remove(line);
-             $('#empty-cart').show();
+            if (viewModel.cart() == "") { $('#empty-cart').show(); };
             };
 
         viewModel.submit = function () {

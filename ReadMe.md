@@ -16,6 +16,10 @@ Login to the admin page:
 username: admin
 password: admin
 
+Set up Email Notification for Orders:
+ProductHub.cs line 71
+_AppStart.cshtml line 9
+
 helpful links
 http://www.mikesdotnetting.com/Article/206/SignalR-And-Knockout-In-ASP.NET-Web-Pages-Using-WebMatrix
 http://knockoutjs.com

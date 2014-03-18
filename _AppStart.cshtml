@@ -5,11 +5,12 @@
     WebSecurity.InitializeDatabaseConnection("Northwind", "UserProfile", "UserId", "Email", true);
     
     RouteTable.Routes.MapHubs();
-    
-    WebMail.SmtpServer = "mailhost.hctx.net";
+   
+   <!--
+    WebMail.SmtpServer = "";
     WebMail.EnableSsl = false;
-    WebMail.UserName = "e-delivery@tax.hctx.net";
-    WebMail.Password = "0$";
-    WebMail.From = "e-delivery@tax.hctx.net";
-
+    WebMail.UserName = "";
+    WebMail.Password = "";
+    WebMail.From = "";
+    --> 
 }
