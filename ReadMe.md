@@ -5,20 +5,15 @@ Lists items and quantities with ability to order items and check them out throug
 Uses Signal R and Knockout. 
 
 Upcoming updates:
-  Send Email on order submit.
-  UI improvements.
-  Upload and display item photos.
   Turn Item Navigation into a tree view.
+  Error Handling Improvements.
+  Search Function.
 
 Note: Download all the necessary assebmly dll files that go in the bin folder. If on WebMatrix, you can download it in the NuGet gallery.
 
 Login to the admin page:
 username: admin
 password: admin
-
-Set up Email Notification for Orders:
-ProductHub.cs line 71
-_AppStart.cshtml line 9
 
 helpful links
 http://www.mikesdotnetting.com/Article/206/SignalR-And-Knockout-In-ASP.NET-Web-Pages-Using-WebMatrix

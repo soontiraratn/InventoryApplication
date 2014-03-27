@@ -2,23 +2,44 @@
 {
 Response.Redirect("login.cshtml");
 }
-}
-@{
     Layout="~/_Layout.cshtml";
+    Page.Title = "Inventory Admin";
 }
-@{
-    Page.Title = "Inventory Application Admin";
+@{    
+      //Photo upload 
+       var Results="";
+       var fileName= "";
+       var idItem="";
+       if(IsPost){
+       var image = Request.Files[0];
+           idItem= Request["selectItem"];
+       var db= Database.Open("Northwind");
+            fileName = Path.GetFileName(image.FileName);
+            if (fileName != String.Empty && idItem != null)
+            {
+                var fileStream = image.InputStream;
+                var fileLength = image.ContentLength;
+                byte[] fileContent = new byte[fileLength];
+                fileStream.Read(fileContent, 0, fileLength);
+                var sql="UPDATE Items SET Image = @0 WHERE id = @1";
+                db.Execute(sql,fileContent,idItem);
+               Results = "successful " + idItem + " " + fileContent;
+            }
+            else{
+                Results = "Unsuccessful " + idItem + " " + fileName;
+            }
+         }    
 }
 <script>
-
+    // Photo Items List
     $.getJSON('JsonServices/GetAllItems', function (data) {
         viewModel.itemsAll(data);
     });
-
+    //Pending Orders Table
     $.getJSON('JsonServices/Orders', function (data) {
         if (data != 0) {
              viewModel.orders(data);
-            $('#pending-orders, #items-ordered').show();
+            $('#pending-wrap').show();
             $('#empty-orders').hide();
         }       
     });
@@ -28,17 +49,18 @@ Response.Redirect("login.cshtml");
         $.getJSON('JsonServices/Orders', function (data) {
         if (data != 0) {
              viewModel.orders(data);
-            $('#pending-orders, #items-ordered').show();
+            $('#pending-wrap').show();
             $('#empty-orders').hide();
         }
         else{
-            $('#pending-orders, #items-ordered').hide();
+            $('#pending-wrap').hide();
             $('#empty-orders').show();
         }
         });     
         };
 
 </script>
+
 <div id="left-col">
  <div id="accordion">
         <h4>Add a Category</h4>
@@ -53,8 +75,10 @@ Response.Redirect("login.cshtml");
 
             <div class="two-col">
                 <p>Existing Categories</p>
-                <select class="data-table" multiple="multiple" data-bind="options:categories, optionsText: 'CategoryName', optionsValue: 'CategoryID',selectedOptions:selectedCat"></select>
+                <select class="data-table cat-list" multiple="multiple" data-bind="options:categories, optionsText: 'CategoryName', optionsValue:'CategoryID',selectedOptions: selectedCat"></select>
                 <button class="smallButton" data-bind="click: removeCat">Delete</button>
+                <button class="smallButton editButton" data-bind="click: editCat">Update</button>
+                <div class="success" id="successCat">Updated</div>
             </div>
         </div>
 
@@ -62,7 +86,7 @@ Response.Redirect("login.cshtml");
         <div id="addItem" class="adminForm">
         
             <div class="two-col">
-                <form enctype="multipart/form-data" data-bind="submit:addItem"><!---->
+                <form enctype="multipart/form-data" data-bind="submit:addItem">
                     <select class="categories2" data-bind="options: categories, optionsText: 'CategoryName', optionsValue: 'CategoryID', optionsCaption: 'Choose a Category', selectedOptions:selectedCat2"></select>
                     <input data-bind="value:newItemName" placeholder="Item Name">
                     <input data-bind="value:newModel" placeholder="Model">
@@ -73,8 +97,8 @@ Response.Redirect("login.cshtml");
                             <input data-bind="value:newInStock">           
                         </span>
                      </div>
-                    <input data-bind="value:newLocation" placeholder="Location">
-                    <!-- <input type="file" data-bind="value:Photo">-->
+                    <!--<input data-bind="value:newLocation" placeholder="Location">-->
+                    <!--<input type="file" data-bind="value:Photo">-->
                     <button class="blue-btn" type="submit">Add Item</button> 
                 </form>
             </div>
@@ -108,9 +132,9 @@ Response.Redirect("login.cshtml");
                             <input data-bind="value:InStock">
                         </span>
                      </div>
-                    <input data-bind="value:Location" placeholder="Location">
+                    <!--<input data-bind="value:Location" placeholder="Location">-->
         
-                    <input type="file" data-bind="value:Photo" name="pic" accept="image/*">
+                    <!--<input type="file" data-bind="value:Photo" name="pic" accept="image/*">-->
                     <button class="blue-btn" type="submit">Update</button>
                 </form>
             </div>
@@ -118,15 +142,20 @@ Response.Redirect("login.cshtml");
 
         <h4>Add Photo</h4>
         <div class="adminForm">
-            <p>Under Construction</p>
-            <div class="two-col">
-                <!--
-                <form enctype="multipart/form-data" method="post">
+             
+            <form enctype="multipart/form-data" method="post">
+               <div class="two-col">
+                <p>Choose an Item</p>
                     <select class="data-table" name="selectItem" multiple="multiple" data-bind="options: itemsAll, optionsText: 'Name', optionsValue: 'id', selectedOptions: selectedItem"></select>
+                </div>
+                <div class="two-col">
+                <p>Select Photo</p>
                     @FileUpload.GetHtml(initialNumberOfFiles:1, allowMoreFilesToBeAdded:false, includeFormTag:false, uploadText:"Upload Image")
-                    <button class="blue-btn" type="submit">Send</button>
-                </form>-->
-            </div>
+                </div>
+                <div class="one-col">    
+                    <button class="blue-btn" type="submit">Upload</button>
+                </div>
+            </form>
         </div>
 
         <h4>Add User</h4>
@@ -139,30 +168,34 @@ Response.Redirect("login.cshtml");
     </div>
 
     <div id="orders">
+
         <h3 id="empty-orders">No Pending Orders</h3>
-        <div id="pending-orders">
-            <h3>Pending Orders</h3> 
-            <table class="orders-table">
-                <thead>
-                    <tr>
-                        <th>Order #</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Order Date</th>
-                        <th>Order Complete?</th>
-                    </tr>
-                </thead>
-                <tbody data-bind="foreach: orders">
-                    <tr class="order-row">
-                        <td data-bind="text:Id"></td>
-                        <td data-bind="text:Name"></td>
-                        <td data-bind="text:Email"></td>
-                        <td data-bind="text:OrderDate"></td>
-                        <td><button id="order-comp" data-bind="click: $root.orderDone">Done</button></td>
-                    </tr> 
-                </tbody>
-            </table>
-        </div>
+        <div id="pending-wrap">
+            <h3>Pending Orders</h3>
+     
+            <div id="pending-orders">
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order #</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Order Date</th>
+                            <th>Order Complete?</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: orders">
+                        <tr class="order-row">
+                            <td data-bind="text:Id"></td>
+                            <td data-bind="text:Name"></td>
+                            <td data-bind="text:Email"></td>
+                            <td data-bind="text:OrderDate"></td>
+                            <td><button id="order-comp" data-bind="click: $root.orderDone">Done</button></td>
+                        </tr> 
+                    </tbody>
+                </table>
+            </div>
+         
         <div id="items-ordered">
             <h3>Items for Order # <span data-bind="text:orderId"></span></h3> 
              <!-----------------ITEM HEADER------------------>
@@ -185,6 +218,7 @@ Response.Redirect("login.cshtml");
                     </tbody>
                  <!----------------- END ITEM LIST------------------>  
                 </table>
+        </div>
         </div>
     </div>       
         

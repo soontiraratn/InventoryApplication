@@ -1,0 +1,23 @@
+﻿@{
+      if (UrlData[0].IsEmpty() || !UrlData[0].IsInt()) {
+        Response.SetStatus(HttpStatusCode.BadRequest);
+        Response.End();
+    }
+      try{
+        var db = Database.Open("Northwind");
+        var sql = "SELECT Image FROM Items WHERE id=@0";
+        var file = db.QuerySingle(sql,UrlData[0]);
+        
+        Response.AddHeader("content-disposition", "attachment; filename=ItemImage");
+        Response.Buffer = true;
+        Response.Charset = "";
+        Response.Cache.SetCacheability(HttpCacheability.NoCache);
+        Response.ContentType = "image/*";
+        Response.BinaryWrite((byte[])file.Image);
+        Response.Flush();
+        Response.End();
+       
+                                   }
+        catch{<p>FILE NOT FOUND!</p>}
+  
+}

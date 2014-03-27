@@ -5,12 +5,12 @@
     WebSecurity.InitializeDatabaseConnection("Northwind", "UserProfile", "UserId", "Email", true);
     
     RouteTable.Routes.MapHubs();
-   
-   <!--
+    
     WebMail.SmtpServer = "";
     WebMail.EnableSsl = false;
+    WebMail.SmtpPort = 25;
     WebMail.UserName = "";
     WebMail.Password = "";
     WebMail.From = "";
-    --> 
+
 }

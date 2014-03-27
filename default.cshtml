@@ -2,63 +2,43 @@
 @using System.IO;
 @{
     Layout="~/_Layout.cshtml";
-    Page.Title = "Inventory Application";
-}
-@{         
-       var Results="";
-       var fileName= "";
-       var idItem="";
-       if(IsPost){
-       var image = Request.Files[0];
-           idItem= Request["selectItem"];
-       var db= Database.Open("Northwind");
-            fileName = Path.GetFileName(image.FileName);
-            if (fileName != String.Empty && idItem != null)
-            {
-                //var fileStream = image.InputStream;
-                var fileLength = image.ContentLength;
-                byte[] fileContent = new byte[fileLength];
-                //fileStream.Read(fileContent, 0, fileLength);
-                //var sql="UPDATE Items SET Image = @0 WHERE id = @1";
-                //db.Execute(sql,fileContent,idItem);
-               Results = "successful " + idItem + " " + fileContent;
-            }
-            else{
-                Results = "Unsuccessful " + idItem + " " + fileName;
-            }
-         }    
+    Page.Title = "Inventory";
 }
 
 <div id="products">
-    @Results
+
     <h1>Items</h1>
 
     <div id="selectBox">
         <select class="categories" data-bind="options: categories, optionsText: 'CategoryName', optionsValue: 'CategoryID', optionsCaption: 'Choose a Category'"></select>
     </div>
-
+     <div id="intro" class="intro"><img src="~/start.png" alt=""></div>
     <table class="itemsList"> 
         <tbody data-bind="foreach: items"> 
             <tr> 
-                <td><span hidden data-bind="text:id"></span></td> 
-                <td><span data-bind="text:Name"></span></td> 
+                <td><span data-bind="value:id"></span></td> 
+                <td><span data-bind="text:Name, value:id"></span></td> 
             </tr> 
         </tbody> 
     </table>
+
 </div>
   
 <div id="detailSection">
-    <h1 id="title">Inventory Application</h1>
+    
+    <h1>Inventory Web App</h1>
     <!--<img src="logo.png" id="logo" alt="" />-->
 
-    <h1 id="intro"> <img src="~/arrow.png" alt="arrow left" />Start by choosing an item.
-    </h1>
-    
+    <div id="intro2" class="intro">
+        <p>This Inventory Web Application was made to list items in surplus and allow people to request these items.</p>
+    </div>
+
     <div id="details">
         <h3>Details</h3>
 
             <div class="row rowImage">
-               <!-- <img data-bind="attr:{src:Image}"></img> -->
+              <img alt="No Image Available" >
+                <span class="data" data-bind="value:ItemsId"></span>
             </div>
        
         <div class="row">
@@ -77,10 +57,10 @@
             <span class="label">Units In Stock:</span>
             <span class="data" data-bind="text:InStock"></span>
         </div>
-        <div class="row">
+        <!--<div class="row">
             <span class="label">Location:</span>
             <span class="data" data-bind="text:Location"></span>
-        </div>
+        </div>-->
         <div class="divider">
         </div>
         <div class="row" id="requestRow">
@@ -110,17 +90,17 @@
        
        <table class="shop-cart" id="items-added"> 
            <tr id="empty-cart"><td>Your Cart is Empty</td></tr>
-           <tbody data-bind="foreach: cart">  
+           <tbody id="cart-items" data-bind="foreach: cart">  
                <tr> 
                     <td><span data-bind="text:name, value: $parent.name"></span></td>
                     <td>                                          
                         <span data-bind="text: quantity,value: $parent.quantity"></span>                        
                     </td>
-                    <td><a class="delete-btn" href="#" data-bind="click: $parent.removeLine"><img src="~/delete.png" width="16" height="16"/></a></td>
+                    <td><a class="delete-btn" href="#" data-bind="click: $parent.removeLine"></a></td>
                 </tr> 
             </tbody> 
         </table>
-        <form> 
+        <form id="cust-info">
             <h1>Your Information</h1>
             <div><input data-bind="value: customer" id="cust-name" type="text" placeholder="Full Name" /></div>
             <div><input data-bind="value: email" type="email" id="cust-email" placeholder="Email" /></div>
@@ -139,5 +119,13 @@
             side: 'right',
             displace: false
         });
+
+        $("#cust-info").validate({
+             rules: {
+                email: {
+                required: true,
+                email: true
+                        }}});
+
     });
 </script>

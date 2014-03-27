@@ -1,11 +1,12 @@
 body {
-    font-family: "Segoe UI", Arial, Helvetica;
+    font-family: 'Nunito', sans-serif;
     background-color: #fcfcfc;
     background-image: url(../background2.png);
     margin: 0;
 }
-* {
-    font-family: 'Nunito',sans-serif;
+img{
+    text-decoration: none;
+    border: none;
 }
 #title {
     font-weight: 300;
@@ -32,7 +33,7 @@ body {
     padding: 5px;
 }
 #detailSection {
-    padding: 5px 5px 5px 250px;
+    padding: 5px 5px 5px 270px;
 }
 #details {
     background-color: #FFFFFF;
@@ -55,6 +56,8 @@ body {
 }
 .rowImage {
     text-align: center;
+    padding: 1px;
+    color: #FFACAC;
 }
 .lastRow {
     margin-top: 15px;
@@ -99,6 +102,7 @@ h1,h2,h3,h4 {
     padding: 20px 10px;
 }
 #selectBox select {
+    font-family: 'Nunito', sans-serif;
     width: 100%;
     padding: 5px;
     font-size: 110%;
@@ -151,8 +155,16 @@ button:disabled {
    width: auto;
    box-shadow: 0 4px #823D38;
 }
+.editButton {
+    background-color: rgb(224,224,224);
+    box-shadow: 0 4px #C0C0C0;
+    color: #6d6d6d;
+}
 button.smallButton:hover {
     background-color: #A64D48; 
+}
+button.editButton:hover {
+    background-color: #d1d0d0;
 }
 .divider {
     width: 100%;
@@ -207,13 +219,13 @@ button.smallButton:hover {
     display: block;
     clear: both;
     margin: 10px 0px;
-    height: 30px;
+    padding: 7px 0px;
 }
 .adminForm .two-col p{
     margin: 0px 0px 5px 0px;
 }
 .data-table {
-    width: 180px;
+    width: 100%;
     height: 120px
 }
 .two-col {
@@ -221,15 +233,29 @@ button.smallButton:hover {
     width: 200px;
     margin: 20px;
 }
+.one-col {
+    width: 440px;
+    margin: 20px;
+}
+#file-upload-0 input {
+  width: 100%;
+}
+#ui-accordion-accordion-panel-3 > form {
+  margin-top: -20px;
+}
 .edit-menu {
     position: absolute;
     top: 15px;
     right: 0;
-    background-image: url(../cart1.png);
+    background-image: url(../cart2.png);
     width: 64px;
     height: 64px;
+    transition-duration: .3s;
 }
-.edit-menu:hover {
+.edit-menu-b {
+    background-image: url(../cart1.png);
+}
+.edit-menu-b:hover {
     background-image: url(../cart.png);
 }
 #edit-menu2 {
@@ -244,20 +270,24 @@ button.smallButton:hover {
     position: absolute;
     top: 25px;
     right: 70px;
-    background-color: #C8F7DC;
+    background-color: #A50311;
     padding: 10px;
-    color: #333;
+    color: #fff;
     display: none;
 }
 #intro {
-    margin-top: 35px;
-    color: #778899;
-    width: 600px;
+    margin: 5px 0px 0px 35px;
+}
+#intro2 {
+  font-family: 'Merriweather',serif;
+  margin: 100px auto;
+  max-width: 500px;
+  text-align: center;
+  width: 100%;
 }
 .success,.success-delete {
   display: none;
   text-align: center;
-  margin-top: 94px;
   background-color: #E8FFF1;
   border-radius: 10px;
   padding: 5px;
@@ -294,19 +324,15 @@ button.smallButton:hover {
     text-align: left;
 }
 .shop-cart th:first-child, .shop-cart td:first-child {
+    font-family: 'Merriweather',serif;
     text-align: center;
     width: 256px;
 }
-.delete-btn img{
+.delete-btn {
+    background-image:url("../delete.png");
     width: 16px;
     height: 16px;
     display: block;
-     -webkit-transition: width .2s, height .2s,-webkit-transform .2s;  /* For Safari 3.1 to 6.0 */
-    transition: width .2s, height .2s, transform .2s; 
-}
-.delete-btn img:hover {
-    width:20px;
-    height:20px;
 }
 .num-box {
     width : 2.5em;
@@ -348,18 +374,21 @@ table.orders-table thead th {
 #order-comp {
     padding: 0px;
     width: 50%;
-    color: #333;
+    color: #fcfcfc;
+    font-size: 80%;
     background-color: #A5CCB5;
     box-shadow: 0 4px #799686;
-    
 }
 .item-table tr {
     background-color: #CCA8A5;
 }
-#pending-orders, #items-ordered {
+#pending-wrap {
     display: none;
     max-height: 500px;
     overflow: auto;
+}
+.error {
+    color: crimson;
 }
 
 /*--------------------------Login Page----------------------------*/

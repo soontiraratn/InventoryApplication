@@ -1,0 +1,7 @@
+﻿@{
+    var db = Database.Open("Northwind");
+    var sql = "SELECT CategoryID, CategoryName, DescriptionCat FROM Categories Where CategoryID = @0";
+    var data = db.Query(sql,UrlData[0]);
+    Response.ContentType = "application/json";
+    Json.Write(data, Response.Output);
+}
