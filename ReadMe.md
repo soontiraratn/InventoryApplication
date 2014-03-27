@@ -9,7 +9,11 @@ Upcoming updates:
   Error Handling Improvements.
   Search Function.
 
-Note: Download all the necessary assebmly dll files that go in the bin folder. If on WebMatrix, you can download it in the NuGet gallery.
+How to get it working.
+======================
+1. Unzip the bin.zip file so that you have the bin folder in your root.
+
+2. To get the email working, go to _AppStart.cshtml and add you SMTP info there. 
 
 Login to the admin page:
 username: admin
